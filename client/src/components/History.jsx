@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
+import { Trash2 } from 'lucide-react';
+import Loading from './Loading';
 
 function History() {
     const [expenses, setExpenses] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetchExpenses();
     }, []);
 
     const fetchExpenses = async () => {
+        setLoading(true);
         try {
             const response = await fetch('/api/expenses');
             if (!response.ok) {
@@ -17,6 +21,24 @@ function History() {
             setExpenses(data);
         } catch (error) {
             console.error('Error fetching expenses:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDelete = async (id) => {
+        if (!window.confirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?')) return;
+
+        try {
+            const response = await fetch(`/api/expenses/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                fetchExpenses();
+            }
+        } catch (error) {
+            console.error('Error deleting expense:', error);
         }
     };
 
@@ -29,7 +51,9 @@ function History() {
 
             <div className="card">
                 <div className="expense-list">
-                    {expenses.length === 0 ? (
+                    {loading ? (
+                        <Loading />
+                    ) : expenses.length === 0 ? (
                         <div className="empty-state">ยังไม่มีรายการ</div>
                     ) : (
                         expenses.map((expense) => (
@@ -42,7 +66,12 @@ function History() {
                                         <span>{new Date(expense.createdAt).toLocaleDateString('th-TH')}</span>
                                     </div>
                                 </div>
-                                <span className="expense-amount">฿{parseFloat(expense.amount).toFixed(2)}</span>
+                                <div className="expense-actions">
+                                    <span className="expense-amount">฿{parseFloat(expense.amount).toFixed(2)}</span>
+                                    <button onClick={() => handleDelete(expense.id)} className="btn-icon delete" title="ลบ">
+                                        <Trash2 size={16} />
+                                    </button>
+                                </div>
                             </div>
                         ))
                     )}

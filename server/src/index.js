@@ -43,6 +43,40 @@ app.post('/api/expenses', async (req, res) => {
   }
 });
 
+// DELETE /api/expenses/:id
+app.delete('/api/expenses/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await prisma.expense.delete({
+      where: { id: parseInt(id) },
+    });
+    res.json({ message: 'Expense deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting expense:', error);
+    res.status(500).json({ error: 'Failed to delete expense' });
+  }
+});
+
+// PUT /api/expenses/:id
+app.put('/api/expenses/:id', async (req, res) => {
+  const { id } = req.params;
+  const { description, amount, category } = req.body;
+  try {
+    const updatedExpense = await prisma.expense.update({
+      where: { id: parseInt(id) },
+      data: {
+        description,
+        amount: parseFloat(amount),
+        category,
+      },
+    });
+    res.json(updatedExpense);
+  } catch (error) {
+    console.error('Error updating expense:', error);
+    res.status(500).json({ error: 'Failed to update expense' });
+  }
+});
+
 if (!process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
