@@ -16,10 +16,14 @@ function App() {
   const fetchExpenses = async () => {
     try {
       const response = await fetch('/api/expenses');
+      if (!response.ok) {
+        throw new Error('Failed to fetch expenses');
+      }
       const data = await response.json();
       setExpenses(data);
     } catch (error) {
       console.error('Error fetching expenses:', error);
+      // Optionally set an error state here to show in UI
     }
   };
 
