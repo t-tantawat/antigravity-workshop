@@ -96,28 +96,28 @@ function Dashboard() {
     const totalExpenses = expenses.reduce((sum, exp) => sum + parseFloat(exp.amount), 0);
 
     return (
-        <div className="dashboard">
-            <header className="page-header">
-                <h1>แดชบอร์ด</h1>
-                <p className="subtitle">จัดการรายรับรายจ่ายของคุณ</p>
+        <div className="max-w-6xl mx-auto">
+            <header className="mb-8">
+                <h1 className="text-3xl font-bold mb-2 bg-gradient-to-br from-slate-100 to-slate-400 bg-clip-text text-transparent">แดชบอร์ด</h1>
+                <p className="text-slate-400 text-[15px]">จัดการรายรับรายจ่ายของคุณ</p>
             </header>
 
-            <div className="stats-grid">
-                <div className="stat-card">
-                    <div className="stat-label">ยอดรวมทั้งหมด</div>
-                    <div className="stat-value">฿{totalExpenses.toFixed(2)}</div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/30 rounded-2xl p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/20">
+                    <div className="text-sm text-slate-400 mb-2">ยอดรวมทั้งหมด</div>
+                    <div className="text-3xl font-bold bg-gradient-to-br from-indigo-500 to-violet-500 bg-clip-text text-transparent">฿{totalExpenses.toFixed(2)}</div>
                 </div>
-                <div className="stat-card">
-                    <div className="stat-label">จำนวนรายการ</div>
-                    <div className="stat-value">{expenses.length}</div>
+                <div className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/30 rounded-2xl p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/20">
+                    <div className="text-sm text-slate-400 mb-2">จำนวนรายการ</div>
+                    <div className="text-3xl font-bold bg-gradient-to-br from-indigo-500 to-violet-500 bg-clip-text text-transparent">{expenses.length}</div>
                 </div>
             </div>
 
-            <div className="card">
-                <h3 className="card-title">{editingId ? 'แก้ไขรายจ่าย' : 'เพิ่มรายจ่ายใหม่'}</h3>
+            <div className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/30 rounded-2xl p-8 mb-8 shadow-lg shadow-black/5">
+                <h3 className="text-xl font-semibold mb-6 text-slate-100">{editingId ? 'แก้ไขรายจ่าย' : 'เพิ่มรายจ่ายใหม่'}</h3>
                 <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="description">รายละเอียด</label>
+                    <div className="mb-5">
+                        <label htmlFor="description" className="block text-sm font-medium text-slate-400 mb-2">รายละเอียด</label>
                         <input
                             type="text"
                             id="description"
@@ -126,11 +126,12 @@ function Dashboard() {
                             onChange={handleChange}
                             placeholder="เช่น ค่าอาหารกลางวัน"
                             required
+                            className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl px-4 py-3.5 text-slate-100 text-[15px] transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 placeholder:text-slate-600"
                         />
                     </div>
 
-                    <div className="form-group">
-                        <label htmlFor="amount">จำนวนเงิน (บาท)</label>
+                    <div className="mb-5">
+                        <label htmlFor="amount" className="block text-sm font-medium text-slate-400 mb-2">จำนวนเงิน (บาท)</label>
                         <input
                             type="number"
                             id="amount"
@@ -140,16 +141,18 @@ function Dashboard() {
                             placeholder="0.00"
                             step="0.01"
                             required
+                            className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl px-4 py-3.5 text-slate-100 text-[15px] transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 placeholder:text-slate-600"
                         />
                     </div>
 
-                    <div className="form-group">
-                        <label htmlFor="category">หมวดหมู่</label>
+                    <div className="mb-5">
+                        <label htmlFor="category" className="block text-sm font-medium text-slate-400 mb-2">หมวดหมู่</label>
                         <select
                             id="category"
                             name="category"
                             value={formData.category}
                             onChange={handleChange}
+                            className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl px-4 py-3.5 text-slate-100 text-[15px] transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
                         >
                             <option value="Food">อาหาร</option>
                             <option value="Transport">ค่าเดินทาง</option>
@@ -159,13 +162,22 @@ function Dashboard() {
                         </select>
                     </div>
 
-                    <div className="form-actions">
-                        <button type="submit" className="btn-primary" disabled={loading}>
+                    <div className="flex gap-4 mt-8">
+                        <button
+                            type="submit"
+                            className="flex items-center justify-center gap-2 w-full bg-gradient-to-br from-indigo-500 to-violet-500 text-white border-none rounded-xl px-6 py-3.5 text-[15px] font-semibold cursor-pointer transition-all duration-200 shadow-lg shadow-indigo-500/30 hover:-translate-y-0.5 hover:shadow-indigo-500/40 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+                            disabled={loading}
+                        >
                             {editingId ? <Edit2 size={20} /> : <Plus size={20} />}
                             {loading ? 'กำลังบันทึก...' : (editingId ? 'บันทึกการแก้ไข' : 'เพิ่มรายจ่าย')}
                         </button>
                         {editingId && (
-                            <button type="button" className="btn-secondary" onClick={handleCancelEdit} disabled={loading}>
+                            <button
+                                type="button"
+                                className="flex items-center justify-center gap-2 bg-slate-700 text-white border-none rounded-xl px-6 py-3.5 text-[15px] font-medium cursor-pointer transition-all duration-200 hover:bg-slate-600"
+                                onClick={handleCancelEdit}
+                                disabled={loading}
+                            >
                                 <X size={20} />
                                 ยกเลิก
                             </button>
@@ -174,31 +186,39 @@ function Dashboard() {
                 </form>
             </div>
 
-            <div className="card">
-                <h3 className="card-title">รายการล่าสุด</h3>
-                <div className="expense-list">
+            <div className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/30 rounded-2xl p-8 mb-8 shadow-lg shadow-black/5">
+                <h3 className="text-xl font-semibold mb-6 text-slate-100">รายการล่าสุด</h3>
+                <div className="flex flex-col gap-4">
                     {loading && !editingId ? (
                         <Loading />
                     ) : expenses.length === 0 ? (
-                        <div className="empty-state">ยังไม่มีรายการ</div>
+                        <div className="text-center text-slate-500 py-12 italic">ยังไม่มีรายการ</div>
                     ) : (
                         expenses.slice(0, 5).map((expense) => (
-                            <div key={expense.id} className="expense-item">
-                                <div className="expense-info">
-                                    <span className="expense-desc">{expense.description}</span>
-                                    <div className="expense-meta">
+                            <div key={expense.id} className="flex justify-between items-center p-5 bg-slate-900/30 border border-slate-700/30 rounded-xl transition-all duration-200 hover:translate-x-1 hover:bg-slate-900/50 hover:border-indigo-500/30 group">
+                                <div className="flex flex-col gap-1.5">
+                                    <span className="font-semibold text-[15px] text-slate-100">{expense.description}</span>
+                                    <div className="flex items-center gap-2 text-[13px] text-slate-400">
                                         <span>{expense.category}</span>
                                         <span>•</span>
                                         <span>{new Date(expense.createdAt).toLocaleDateString('th-TH')}</span>
                                     </div>
                                 </div>
-                                <div className="expense-actions">
-                                    <span className="expense-amount">฿{parseFloat(expense.amount).toFixed(2)}</span>
-                                    <div className="action-buttons">
-                                        <button onClick={() => handleEdit(expense)} className="btn-icon edit" title="แก้ไข">
+                                <div className="flex items-center gap-4">
+                                    <span className="font-bold text-lg bg-gradient-to-br from-indigo-500 to-violet-500 bg-clip-text text-transparent">฿{parseFloat(expense.amount).toFixed(2)}</span>
+                                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                        <button
+                                            onClick={() => handleEdit(expense)}
+                                            className="p-2 bg-transparent border border-slate-700/50 text-slate-400 rounded-lg flex items-center justify-center cursor-pointer transition-all duration-200 hover:bg-indigo-500/10 hover:text-indigo-500 hover:border-indigo-500/20"
+                                            title="แก้ไข"
+                                        >
                                             <Edit2 size={16} />
                                         </button>
-                                        <button onClick={() => handleDelete(expense.id)} className="btn-icon delete" title="ลบ">
+                                        <button
+                                            onClick={() => handleDelete(expense.id)}
+                                            className="p-2 bg-transparent border border-slate-700/50 text-slate-400 rounded-lg flex items-center justify-center cursor-pointer transition-all duration-200 hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/20"
+                                            title="ลบ"
+                                        >
                                             <Trash2 size={16} />
                                         </button>
                                     </div>

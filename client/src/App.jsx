@@ -21,9 +21,9 @@ function App() {
   };
 
   return (
-    <div className="app-container">
+    <div className="flex h-screen overflow-hidden bg-slate-900 text-slate-100">
       <Sidebar activeView={activeView} setActiveView={setActiveView} />
-      <main className="main-content">
+      <main className="flex-1 overflow-y-auto p-8 md:p-12">
         {renderView()}
       </main>
     </div>
